@@ -1,6 +1,6 @@
 Name:       meep
 Version:    1.2.1
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    Unofficial meep RPM package
 
 #Group:
@@ -36,7 +36,10 @@ BuildRequires: libgfortran
 BuildRequires: libiscsi
 BuildRequires: libquadmath
 
-#Requires:
+# Without this meep fails at
+# ERROR: In procedure apply-smob/1:
+# ERROR: In procedure open-file: No such file or directory: "/usr/share/libctl/base/include.scm"
+Requires:      libctl-devel
 
 %description
 Meep is a free finite-difference time-domain (FDTD) simulation software package
@@ -73,6 +76,9 @@ make install DESTDIR=%{buildroot}
 
 
 %changelog
+* Fri Mar 20 2015 makerpm - 1.2.1-2
+- Added libctl-devel requirement
+
 * Thu Mar 19 2015 Mark Harfouche - 1.2.1-1
 - First build
 
