@@ -69,7 +69,7 @@ make install DESTDIR=%{buildroot}
 %{_bindir}/*
 %{_datadir}/%{name}
 %{_includedir}/%{name}.hpp
-%{_includedir}/%{name}
+%{_includedir}/%{name}/*
 %{_libdir}/lib%{name}.la
 %{_libdir}/lib%{name}.a
 %{_libdir}/pkgconfig/*

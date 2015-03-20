@@ -1,0 +1,19 @@
+--- configure_orig.ac	2015-03-20 08:17:51.743315660 -0700
++++ configure.ac	2015-03-20 08:19:00.073598038 -0700
+@@ -407,6 +407,8 @@
+ fi
+ AC_SUBST(CTL_H_CPPFLAG)
+ 
++save_CPPFLAGS=$CPPFLAGS
++CPPFLAGS="$CPPFLAGS $CTL_H_CPPFLAG"
+ # Check libctl version >= LIBCTL_MAJOR.LIBCTL_MINOR.LIBCTL_BUGFIX
+ LIBCTL_MAJOR=3; LIBCTL_MINOR=2; LIBCTL_BUGFIX=1
+ AC_MSG_CHECKING([whether libctl version is at least ${LIBCTL_MAJOR}.${LIBCTL_MINOR}.${LIBCTL_BUGFIX}])
+@@ -416,6 +418,7 @@
+   yes
+ #endif
+ ]], [AC_MSG_RESULT(ok)], [AC_MSG_ERROR([libctl version ${LIBCTL_MAJOR}.${LIBCTL_MINOR}.${LIBCTL_BUGFIX} or later is required])])
++CPPFLAGS=$save_CPPFLAGS
+ 
+ # Check for libctl_quiet feature (in libctl 3.1.1 or later):
+ AC_MSG_CHECKING([for libctl_quiet feature])

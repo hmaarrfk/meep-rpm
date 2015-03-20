@@ -1,0 +1,11 @@
+--- tests/Makefile_orig.am	2015-03-20 08:45:42.078794267 -0700
++++ tests/Makefile.am	2015-03-20 08:45:58.292624335 -0700
+@@ -2,7 +2,7 @@
+ EXTRA_DIST = blastest.real.out blastest.complex.out
+ 
+ LIBMPB = $(top_builddir)/src/libmpb@MPB_SUFFIX@.la
+-AM_CPPFLAGS = -I$(top_srcdir)/src/util -I$(top_srcdir)/src/matrices -I$(top_srcdir)/src/maxwell
++AM_CPPFLAGS = -I$(top_srcdir)/src/util -I$(top_srcdir)/src/matrices -I$(top_srcdir)/src/maxwell $(CTL_H_CPPFLAG)
+ 
+ malloctest_SOURCES = malloctest.c
+ malloctest_LDADD = $(LIBMPB)
