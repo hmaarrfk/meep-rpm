@@ -1,40 +1,38 @@
 Name:       meep
-Version:    1.2.1
-Release:    2%{?dist}
+Version:    1.2.2
+Release:    1%{?dist}
 Summary:    Unofficial meep RPM package
 
 #Group:
 License:    GNU GPL
 URL:        http://ab-initio.mit.edu/meep/
-Source0:    %{name}-%{version}.tar.gz
+%global commit 7c9aeb2f0324565247542a36865d0b0e7c8cceb4
+Source0:    meep-%{commit}.tar.gz
 # github patches
 # patch 14 fixes issues for Fedora 21
-Patch0: 14.patch
 # patch is for the new interface of harminv
-Patch1: 15.patch
+# Patch 0 and 1 are required for version 1.2.1
+#Patch0: 14.patch
+#Patch1: 15.patch
 
-BuildRequires: autoconf
+
+# Patch 2 helps makes autogen do less
+# alos return the correct exit status
+Patch2: meep-patch0_autogenExitStatus.patch
+# Patch 3 makes the mpb interface work. They updated something
+Patch3: meep-patch1_newmpbEigensolver.patch
+
 BuildRequires: blas
-BuildRequires: cpio
-BuildRequires: fftw-devel
-BuildRequires: fftw-libs-double
-BuildRequires: gc-devel
-BuildRequires: gcc-gfortran
-BuildRequires: glibc
-BuildRequires: glibc-common
-BuildRequires: glibc-devel
-BuildRequires: glibc-headers
-BuildRequires: gmp-devel
-BuildRequires: gsl-devel
-BuildRequires: guile-devel
-BuildRequires: harminv
-BuildRequires: hdf5-devel
 BuildRequires: lapack
 BuildRequires: libctl-devel
-BuildRequires: libgcc
-BuildRequires: libgfortran
-BuildRequires: libiscsi
-BuildRequires: libquadmath
+BuildRequires: guile-devel
+
+# Not so optional
+BuildRequires: hdf5-devel
+
+# Optional libraries but come on, these are small packages that are useful
+BuildRequires: harminv
+BuildRequires: mpb
 
 # Without this meep fails at
 # ERROR: In procedure apply-smob/1:
@@ -48,15 +46,17 @@ package. Its features include:
 
 
 %prep
-%setup -q
-%patch0 -p0
+%setup -qn meep-%{commit}
+#%patch0 -p0
 #%patch1 -p0
+%patch2 -p1
+%patch3 -p1
 
 
 # autoconf is required because for now patch 14 patches the configure.ac file
 %build
-autoconf
-%configure
+sh autogen.sh
+%configure --enable-maintainer-mode
 make %{?_smp_mflags}
 
 
@@ -76,7 +76,10 @@ make install DESTDIR=%{buildroot}
 
 
 %changelog
-* Fri Mar 20 2015 makerpm - 1.2.1-2
+* Fri Mar 20 2015 Mark Harfouche - 1.2.2-1
+- Using git version now
+
+* Fri Mar 20 2015 Mark Harfouche - 1.2.1-2
 - Added libctl-devel requirement
 
 * Thu Mar 19 2015 Mark Harfouche - 1.2.1-1

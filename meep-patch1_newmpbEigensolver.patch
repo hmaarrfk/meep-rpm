@@ -1,0 +1,10 @@
+--- meep-7c9aeb2f0324565247542a36865d0b0e7c8cceb4/src/mpb_orig.cpp	2015-03-20 15:23:23.103361094 -0700
++++ meep-7c9aeb2f0324565247542a36865d0b0e7c8cceb4/src/mpb.cpp	2015-03-20 15:29:13.560633833 -0700
+@@ -260,6 +260,7 @@
+ 
+   do {
+     eigensolver(H, eigvals, maxwell_operator, (void *) mdata,
++            NULL, NULL,
+ 		maxwell_preconditioner2, (void *) mdata,
+ 		evectconstraint_chain_func,
+ 		(void *) constraints,

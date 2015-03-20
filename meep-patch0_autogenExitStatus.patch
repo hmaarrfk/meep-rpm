@@ -1,0 +1,22 @@
+--- meep-7c9aeb2f0324565247542a36865d0b0e7c8cceb4/autogen_orig.sh	2015-03-20 15:16:13.958942686 -0700
++++ meep-7c9aeb2f0324565247542a36865d0b0e7c8cceb4/autogen.sh	2015-03-20 15:20:11.970401650 -0700
+@@ -20,12 +20,13 @@
+ autoreconf --verbose --install --symlink --force
+ autoreconf --verbose --install --symlink --force
+ 
+-config=good # hackery so darcs_test still outputs config.log w/failed configure
++# Just configure in the RPM itself in maintainer mode
++#config=good # hackery so darcs_test still outputs config.log w/failed configure
+ 
+-./configure --enable-maintainer-mode $configure_args || config=bad
++#./configure --enable-maintainer-mode $configure_args || config=bad
+ 
+-if test x$verbose = xyes; then
+-    cat config.log
+-fi
++#if test x$verbose = xyes; then
++    #cat config.log
++#fi
+ 
+-test $config = bad && exit 1
++#test $config = bad && exit 0
