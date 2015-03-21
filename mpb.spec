@@ -16,6 +16,8 @@ Patch1:     mpb-testCTL.patch
 Patch2:     mpb-utilsCTL.patch
 Patch3:     mpb-autogenRemoveConfigure.patch
 
+%global mpi_list mpich openmpi
+
 BuildRequires: atlas
 BuildRequires: blas
 BuildRequires: fftw-devel
@@ -38,14 +40,23 @@ dielectric structures, on both serial and parallel computers. It was developed
 by Steven G. Johnson at MIT along with the Joannopoulos Ab Initio Physics
 group.
 
-%package mpi
-Summary:    Unofficial MPB RPM package with mpi support
+%package mpich
+Summary:    Unofficial MPB RPM package with mpich support
+BuildRequires: mpich-devel
 Requires:   mpich
 Requires:   mpb
 
-%description mpi
-The MIT Photonic-Bands (MPB) with MPI.
+%description mpich
+The MIT Photonic-Bands (MPB) with MPI (mpich).
 
+%package openmpi
+Summary:    Unofficial MPB RPM package with openmpi support
+BuildRequires: openmpi-devel
+Requires:   openmpi
+Requires:   mpb
+
+%description openmpi
+The MIT Photonic-Bands (MPB) with MPI (openmpi).
 
 
 %prep
@@ -55,24 +66,39 @@ The MIT Photonic-Bands (MPB) with MPI.
 %patch2 -p0
 %patch3 -p1
 
-
 # autoconf is required because for now patch 14 patches the configure.ac file
 %build
 sh autogen.sh
 
 cd ..
-rm -rf %{name}-%{commit}-build
-rm -rf %{name}-%{commit}-build-mpi
+for mpi in %{mpi_list}
+do
+rm -rf %{name}-%{commit}-build-$mpi
 
-cp -p -R %{name}-%{commit} %{name}-%{commit}-build-mpi
+cp -p -R %{name}-%{commit} %{name}-%{commit}-build-$mpi
 
-pushd %{name}-%{commit}-build-mpi
-module load mpi/mpich-%{_arch}
-%configure --enable-maintainer-mode --with-mpi --with-fftw2
+pushd %{name}-%{commit}-build-$mpi
+module load mpi/${mpi}-%{_arch}
+
+%configure \
+    --enable-maintainer-mode \
+    --with-mpi \
+    --with-fftw2 \
+    --libdir=%{_libdir}/$mpi/lib \
+    --bindir=%{_libdir}/$mpi/bin \
+    --sbindir=%{_libdir}/$mpi/sbin \
+    --includedir=%{_includedir}/$mpi-%{_arch} \
+    --datarootdir=%{_libdir}/$mpi/share \
+    --mandir=%{_libdir}/$mpi/share/man
+
 make %{?_smp_mflags}
+
 module purge
 popd
+done
 
+
+rm -rf %{name}-%{commit}-build
 cp -p -R %{name}-%{commit} %{name}-%{commit}-build
 pushd %{name}-%{commit}-build
 %configure --enable-maintainer-mode
@@ -84,32 +110,39 @@ cd ..
 pushd %{name}-%{commit}-build
 make install DESTDIR=%{buildroot}
 popd
-pushd %{name}-%{commit}-build-mpi
-make install DESTDIR=%{buildroot}
-popd
+for mpi in %{mpi_list}
+do
+make -C %{name}-%{commit}-build-${mpi} install DESTDIR=%{buildroot}
+done
+
+find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 
 
 %files
 %doc
-%{_bindir}/mpb
-%{_bindir}/mpb-data
-%{_bindir}/mpb-split
-%{_datadir}/mpb
-%{_includedir}/mpb.h
-%{_includedir}/mpb/*
-%{_libdir}/libmpb.la
-%{_libdir}/libmpb.a
+%{_bindir}/*
+%{_datadir}/*
+%{_includedir}/*
+%{_libdir}/*
 %{_mandir}/man1/*
 
-%files mpi
-%{_bindir}/mpb-mpi
-%{_libdir}/libmpb_mpi.la
-%{_libdir}/libmpb_mpi.a
-%{_includedir}/mpb_mpi.h
+%files mpich
+%{_libdir}/mpich/bin/*
+%{_libdir}/mpich/lib/*
+%{_includedir}/mpich-%{_arch}/*
+%{_libdir}/mpich/share/man/man1/*
 
+%files openmpi
+%{_libdir}/openmpi/bin/*
+%{_libdir}/openmpi/lib/*
+%{_includedir}/openmpi-%{_arch}/*
+%{_libdir}/openmpi/share/man/man1/*
 
 
 %changelog
+* Sat Mar 21 2015 Mark Harfouche - 1.5.1-2
+- Added openmpi and mpich
+
 * Fri Mar 20 2015 Mark Harfouche - 1.5.1-1
 - First build
 
