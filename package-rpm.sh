@@ -9,6 +9,6 @@ cp *.patch ~/rpmbuild/SOURCES/
 
 
 # build for both archetectures
-#auto-br-rpmbuild -bb ~/rpmbuild/SPECS/meep.spec
-rpmbuild -bb ~/rpmbuild/SPECS/meep.spec
+auto-br-rpmbuild -bb ~/rpmbuild/SPECS/meep.spec
+#rpmbuild -bb ~/rpmbuild/SPECS/meep-mpi.spec
 
