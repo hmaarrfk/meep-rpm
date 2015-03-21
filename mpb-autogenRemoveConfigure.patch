@@ -1,0 +1,8 @@
+--- mpb-69b17e86a56f08d5a06cd15a7fbe12dad7e4458c/autogen_orig.sh	2015-03-21 11:39:39.577717837 -0700
++++ mpb-69b17e86a56f08d5a06cd15a7fbe12dad7e4458c/autogen.sh	2015-03-21 11:39:48.938620075 -0700
+@@ -18,4 +18,4 @@
+ autoreconf --verbose --install --symlink --force
+ autoreconf --verbose --install --symlink --force
+ 
+-./configure --enable-maintainer-mode $configure_args
++#./configure --enable-maintainer-mode $configure_args
