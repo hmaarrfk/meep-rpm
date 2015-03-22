@@ -1,6 +1,6 @@
 Name:       mpb
 Version:    1.5.1
-Release:    6%{?dist}
+Release:    7%{?dist}
 Summary:    Unofficial MPB RPM package
 
 %global commit 69b17e86a56f08d5a06cd15a7fbe12dad7e4458c
@@ -82,6 +82,7 @@ module load mpi/${mpi}-%{_arch}
 
 %configure \
     --enable-maintainer-mode \
+    --enable-portable-binary \
     --with-mpi \
     --with-fftw2 \
     --libdir=%{_libdir}/$mpi/lib \
@@ -101,7 +102,7 @@ done
 rm -rf %{name}-%{commit}-build
 cp -p -R %{name}-%{commit} %{name}-%{commit}-build
 pushd %{name}-%{commit}-build
-%configure --enable-maintainer-mode
+%configure --enable-maintainer-mode --enable-portable-binary
 make %{?_smp_mflags}
 popd
 
@@ -142,6 +143,9 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 
 
 %changelog
+* Sun Mar 22 2015 Mark Harfouche- 1.5.1-7
+- Got portable libraries now
+
 * Sun Mar 22 2015 Mark Harfouche - 1.5.1-6
 - Finally got the right dependencies, I think
 
