@@ -1,6 +1,6 @@
 Name:       meep
 Version:    1.2.2
-Release:    3%{?dist}
+Release:    4%{?dist}
 Summary:    Unofficial meep RPM package
 
 #Group:
@@ -127,7 +127,8 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 %{_bindir}/*
 %{_datadir}/*
 %{_includedir}/*
-%{_libdir}/*
+%{_libdir}/*.a
+%{_libdir}/pkgconfig/meep.pc
 #%{_mandir}/man1/*
 
 %files mpich
@@ -146,6 +147,9 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 
 
 %changelog
+* Sun Mar 22 2015 Mark Harfouche - 1.2.2-4
+- I think the dependencies on meep are fixed. No longer requires mpi
+
 * Sun Mar 22 2015 Mark Harfouche - 1.2.2-3
 - I think it actually has MPB support now. Also compiles for openmpi and mpich
 
