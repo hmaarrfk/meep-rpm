@@ -1,6 +1,6 @@
 Name:       mpb
 Version:    1.5.1
-Release:    1%{?dist}
+Release:    6%{?dist}
 Summary:    Unofficial MPB RPM package
 
 %global commit 69b17e86a56f08d5a06cd15a7fbe12dad7e4458c
@@ -18,18 +18,18 @@ Patch3:     mpb-autogenRemoveConfigure.patch
 
 %global mpi_list mpich openmpi
 
-BuildRequires: atlas
-BuildRequires: blas
-BuildRequires: fftw-devel
-BuildRequires: fftw-libs-double
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: blas-devel
+BuildRequires: fftw2
+BuildRequires: fftw2-devel
 BuildRequires: guile-devel
 BuildRequires: hdf5-devel
-BuildRequires: lapack
-BuildRequires: libctl
+BuildRequires: lapack-devel
+BuildRequires: libctl-devel
 BuildRequires: libgfortran
-BuildRequires: libiscsi
-BuildRequires: libquadmath
-BuildRequires: mpich-devel
+BuildRequires: libquadmath-devel
+BuildRequires: libtool
 
 Requires:      libctl-devel
 
@@ -43,8 +43,8 @@ group.
 %package mpich
 Summary:    Unofficial MPB RPM package with mpich support
 BuildRequires: mpich-devel
+BuildRequires: fftw2-mpich-devel
 Requires:   mpich
-Requires:   mpb
 
 %description mpich
 The MIT Photonic-Bands (MPB) with MPI (mpich).
@@ -52,8 +52,8 @@ The MIT Photonic-Bands (MPB) with MPI (mpich).
 %package openmpi
 Summary:    Unofficial MPB RPM package with openmpi support
 BuildRequires: openmpi-devel
+BuildRequires: fftw2-openmpi-devel
 Requires:   openmpi
-Requires:   mpb
 
 %description openmpi
 The MIT Photonic-Bands (MPB) with MPI (openmpi).
@@ -127,12 +127,14 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 %{_mandir}/man1/*
 
 %files mpich
+%doc
 %{_libdir}/mpich/bin/*
 %{_libdir}/mpich/lib/*
 %{_includedir}/mpich-%{_arch}/*
 %{_libdir}/mpich/share/man/man1/*
 
 %files openmpi
+%doc
 %{_libdir}/openmpi/bin/*
 %{_libdir}/openmpi/lib/*
 %{_includedir}/openmpi-%{_arch}/*
@@ -140,6 +142,18 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 
 
 %changelog
+* Sun Mar 22 2015 Mark Harfouche - 1.5.1-6
+- Finally got the right dependencies, I think
+
+* Sat Mar 21 2015 Mark Harfouche - 1.5.1-5
+- rebuilt
+
+* Sat Mar 21 2015 Mark Harfouche - 1.5.1-4
+- rebuilt
+
+* Sat Mar 21 2015 Mark Harfouche - 1.5.1-3
+- Added BuildRequires autocom and automake
+
 * Sat Mar 21 2015 Mark Harfouche - 1.5.1-2
 - Added openmpi and mpich
 
