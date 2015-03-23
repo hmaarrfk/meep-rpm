@@ -1,0 +1,14 @@
+--- meep-7c9aeb2f0324565247542a36865d0b0e7c8cceb4/configure_orig.ac	2015-03-23 15:41:16.080245164 -0700
++++ meep-7c9aeb2f0324565247542a36865d0b0e7c8cceb4/configure.ac	2015-03-23 15:42:09.808686181 -0700
+@@ -178,7 +178,11 @@
+                    [have_mpb=yes; LIBS="-lmpb $LAPACK_LIBS $BLAS_LIBS $LIBS $FLIBS"], [AC_MSG_WARN([MPB support is disabled])], [$LAPACK_LIBS $BLAS_LIBS $FLIBS])])
+   if test $have_mpb = yes; then
+      AC_DEFINE([HAVE_MPB], [1], [Define if you have libmpb])
++  else
++      AC_MSG_ERROR([MPB is required.])
+   fi
++else
++      AC_MSG_ERROR([MPB is required 2.])
+ fi
+ 
+ ##############################################################################

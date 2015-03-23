@@ -1,6 +1,6 @@
 Name:       meep
 Version:    1.2.2
-Release:    4%{?dist}
+Release:    5%{?dist}
 Summary:    Unofficial meep RPM package
 
 #Group:
@@ -13,6 +13,8 @@ Source0:    meep-%{commit}.tar.gz
 Patch0: meep-patch0_autogenExitStatus.patch
 # Patch 1 makes the mpb interface work. They updated something
 Patch1: meep-patch1_newmpbEigensolver.patch
+Patch2: meep-requireMPB.patch
+
 
 BuildRequires: autoconf
 BuildRequires: automake
@@ -31,6 +33,7 @@ BuildRequires: hdf5-devel
 # Optional libraries but come on, these are small packages that are useful
 BuildRequires: harminv
 BuildRequires: mpb
+BuildRequires: fftw2-devel
 
 
 # Without this meep fails at
@@ -51,6 +54,7 @@ Summary:    Unofficial meep RPM package with mpich support
 # need to compile against mpich
 BuildRequires: mpich-devel
 BuildRequires: mpb-mpich
+BuildRequires: fftw2-mpich-devel
 
 %description mpich
 Meep finite-difference time-domain (FDTD) simulation software with mpich.
@@ -60,6 +64,7 @@ Summary:    Unofficial meep RPM package with openmpi support
 # need to compile against mpich
 BuildRequires: openmpi-devel
 BuildRequires: mpb-openmpi
+BuildRequires: fftw2-openmpi-devel
 
 %description openmpi
 Meep finite-difference time-domain (FDTD) simulation software with openmpi.
@@ -69,10 +74,10 @@ Meep finite-difference time-domain (FDTD) simulation software with openmpi.
 %setup -qn meep-%{commit}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 
 %build
-sh autogen.sh
 cd ..
 
 for mpi in %{mpi_list}
@@ -83,6 +88,8 @@ cp -p -R %{name}-%{commit} %{name}-%{commit}-build-$mpi
 
 pushd %{name}-%{commit}-build-$mpi
 module load mpi/${mpi}-%{_arch}
+
+sh autogen.sh
 
 %configure \
     --enable-maintainer-mode \
@@ -106,6 +113,7 @@ rm -rf %{name}-%{commit}-build
 cp -p -R %{name}-%{commit} %{name}-%{commit}-build
 
 pushd %{name}-%{commit}-build
+sh autogen.sh
 # Make once for without mpi
 %configure --enable-maintainer-mode --enable-portable-binary
 make %{?_smp_mflags}
@@ -147,6 +155,9 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 
 
 %changelog
+* Mon Mar 23 2015 Mark Harfouche - 1.2.2-5
+- Trying to make sure that it is compiled with MPB
+
 * Sun Mar 22 2015 Mark Harfouche - 1.2.2-4
 - I think the dependencies on meep are fixed. No longer requires mpi
 
