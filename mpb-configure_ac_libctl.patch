@@ -1,0 +1,11 @@
+--- configure_mpb.ac	2015-04-06 07:51:35.759641381 -0700
++++ configure.ac	2015-04-06 07:51:43.608556703 -0700
+@@ -401,7 +401,7 @@
+      AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <ctl.h>]],[])], [CTL_H_CPPFLAG=-I$ctl_h_path; break])
+   done
+   AC_MSG_RESULT([$CTL_H_CPPFLAG])
+-  CPPFLAGS=$save_CPPFLAGS])
++  ])
+ if test "x$CTL_H_CPPFLAG" = "x"; then
+   AC_MSG_ERROR([Couldn't find the ctl.h header file for libctl.])
+ fi

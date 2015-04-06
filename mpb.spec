@@ -1,6 +1,6 @@
 Name:       mpb
 Version:    1.5.1
-Release:    8%{?dist}
+Release:    9%{?dist}
 Summary:    Unofficial MPB RPM package
 
 %global commit 69b17e86a56f08d5a06cd15a7fbe12dad7e4458c
@@ -15,6 +15,7 @@ Patch0:     mpb-Fedoralibctl.patch
 Patch1:     mpb-testCTL.patch
 Patch2:     mpb-utilsCTL.patch
 Patch3:     mpb-autogenRemoveConfigure.patch
+Patch4:     mpb-configure_ac_libctl.patch
 
 %global mpi_list mpich openmpi
 
@@ -59,10 +60,8 @@ The MIT Photonic-Bands (MPB) with MPI (openmpi).
 
 %prep
 %setup -qn %{name}-%{commit}
-%patch0 -p0
-%patch1 -p0
-%patch2 -p0
 %patch3 -p1
+%patch4 -p0
 
 # autoconf is required because for now patch 14 patches the configure.ac file
 %build
@@ -149,6 +148,9 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 
 
 %changelog
+* Mon Apr 06 2015 Mark Harfouche - 1.5.1-9
+- Simplified the patch for fidning the correct libctl path.
+
 * Sun Mar 22 2015 Mark Harfouche - 1.5.1-8
 - Fixed a problem with mpb requiring openmpi and mpich
 
