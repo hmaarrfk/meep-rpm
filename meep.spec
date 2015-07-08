@@ -1,19 +1,17 @@
 Name:       meep
-Version:    1.2.2
-Release:    5%{?dist}
+Version:    1.3
+Release:    1%{?dist}
 Summary:    Unofficial meep RPM package
 
 #Group:
 License:    GNU GPL
 URL:        http://ab-initio.mit.edu/meep/
-%global commit 7c9aeb2f0324565247542a36865d0b0e7c8cceb4
-Source0:    meep-%{commit}.tar.gz
+%global commit 3ae453dfbe32f463713c274bf0da2a980905f3bb
+Source0:    meep-%{commit}.zip
 # Patch 0 helps makes autogen do less
 # alos return the correct exit status
 Patch0: meep-patch0_autogenExitStatus.patch
-# Patch 1 makes the mpb interface work. They updated something
-Patch1: meep-patch1_newmpbEigensolver.patch
-Patch2: meep-requireMPB.patch
+Patch1: meep-requireMPB.patch
 
 
 BuildRequires: autoconf
@@ -32,7 +30,7 @@ BuildRequires: hdf5-devel
 
 # Optional libraries but come on, these are small packages that are useful
 BuildRequires: harminv
-BuildRequires: mpb
+BuildRequires: mpb >= 1.5.1-10
 BuildRequires: fftw2-devel
 
 
@@ -74,7 +72,6 @@ Meep finite-difference time-domain (FDTD) simulation software with openmpi.
 %setup -qn meep-%{commit}
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 
 
 %build
@@ -155,6 +152,9 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 
 
 %changelog
+* Wed Jul 8 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.3-5
+- Updated versions of MEEP
+
 * Mon Mar 23 2015 Mark Harfouche - 1.2.2-5
 - Trying to make sure that it is compiled with MPB
 
