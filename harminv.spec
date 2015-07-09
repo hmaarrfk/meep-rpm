@@ -1,6 +1,6 @@
 Name:       harminv
 Version:    1.4.0
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    Unofficial Harminv Package
 
 #Group:
@@ -23,7 +23,6 @@ BuildRequires: libgcc
 BuildRequires: libgfortran
 BuildRequires: libquadmath-devel
 BuildRequires: libstdc++-devel
-BuildRequires: libmatheval
 
 #Requires:
 
@@ -63,6 +62,9 @@ make install DESTDIR=%{buildroot}
 
 
 %changelog
+* Wed Jul 8 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.4.0-2
+- rebuild
+
 * Wed Jul 8 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.4.0-1
 - Updated versions of harminv
 

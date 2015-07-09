@@ -1,6 +1,6 @@
 Name:       h5utils
 Version:    1.12.1
-Release:    2%{?dist}
+Release:    3%{?dist}
 Summary:    Unofficial h5utils RPM package
 
 #Group:
@@ -13,6 +13,7 @@ BuildRequires: cpio
 BuildRequires: hdf5-devel
 BuildRequires: libjpeg-turbo
 BuildRequires: libpng-devel
+BuildRequires: libmatheval-devel
 
 #Requires:
 
@@ -48,6 +49,8 @@ make install DESTDIR=%{buildroot}
 
 
 %changelog
+* Fri Mar 20 2015 makerpm - 1.12.1-3
+- Added the dependency required to build h5math
 * Fri Mar 20 2015 makerpm - 1.12.1-2
 -Apparently png frees the memory itself for the palette.
 

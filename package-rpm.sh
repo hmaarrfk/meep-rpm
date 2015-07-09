@@ -13,5 +13,6 @@ cp *.patch ~/rpmbuild/SOURCES/
 rpmbuild -bs ~/rpmbuild/SPECS/meep.spec
 rpmbuild -bs ~/rpmbuild/SPECS/mpb.spec
 rpmbuild -bs ~/rpmbuild/SPECS/harminv.spec
+rpmbuild -bs ~/rpmbuild/SPECS/h5utils.spec
 #rpmbuild -bb ~/rpmbuild/SPECS/meep-mpi.spec
 
