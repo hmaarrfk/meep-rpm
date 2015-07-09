@@ -16,3 +16,4 @@ Repository can be found here:
 https://copr.fedoraproject.org/coprs/hmaarrfk/meep/
 
 I stopped building the 32bit packages because I figure you will be running this on a half modern computer which will be running 64 bit. The builds take a bit of time on COPR and when they fail, it forces me to wait even longer. I'll build the 32bit packages on request.
+I also stopped building rawhide for the same reason. I figure you are doing research on a half stable machine.
