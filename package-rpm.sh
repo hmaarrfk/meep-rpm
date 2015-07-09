@@ -12,5 +12,6 @@ cp *.patch ~/rpmbuild/SOURCES/
 #auto-br-rpmbuild -bb ~/rpmbuild/SPECS/meep.spec
 rpmbuild -bs ~/rpmbuild/SPECS/meep.spec
 rpmbuild -bs ~/rpmbuild/SPECS/mpb.spec
+rpmbuild -bs ~/rpmbuild/SPECS/harminv.spec
 #rpmbuild -bb ~/rpmbuild/SPECS/meep-mpi.spec
 

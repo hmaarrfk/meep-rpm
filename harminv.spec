@@ -1,13 +1,18 @@
 Name:       harminv
-Version:    1.3.1
-Release:    3%{?dist}
+Version:    1.4.0
+Release:    1%{?dist}
 Summary:    Unofficial Harminv Package
 
 #Group:
 License:    GNU GPL
 URL:        http://ab-initio.mit.edu/wiki/index.php/Harminv
-Source0:    http://ab-initio.mit.edu/harminv/%{name}-%{version}.tar.gz
+%global commit ba947a42c5c2ade0c3c3b48d539575ebc87db8a1
+#Source0:    http://ab-initio.mit.edu/harminv/%{name}-%{version}.tar.gz
+Source0:    harminv-%{commit}.zip
 
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: libtool
 BuildRequires: blas-devel
 BuildRequires: gcc
 BuildRequires: gcc-gfortran
@@ -18,6 +23,7 @@ BuildRequires: libgcc
 BuildRequires: libgfortran
 BuildRequires: libquadmath-devel
 BuildRequires: libstdc++-devel
+BuildRequires: libmatheval
 
 #Requires:
 
@@ -30,11 +36,16 @@ and phases of those sinusoids.
 
 
 %prep
-%setup -q
+%setup -qn harminv-%{commit}
 
 
 %build
-%configure
+libtoolize --force
+autoreconf --verbose --install --symlink --force
+autoreconf --verbose --install --symlink --force
+autoreconf --verbose --install --symlink --force
+%configure \
+    --enable-maintainer-mode
 make %{?_smp_mflags}
 
 
@@ -52,6 +63,9 @@ make install DESTDIR=%{buildroot}
 
 
 %changelog
+* Wed Jul 8 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.4.0-1
+- Updated versions of harminv
+
 * Sat Mar 21 2015 Mark Harfouche - 1.3.1-3
 - BuildDepends modifications
 

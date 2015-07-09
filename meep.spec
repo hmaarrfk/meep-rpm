@@ -1,6 +1,6 @@
 Name:       meep
-Version:    1.3
-Release:    1%{?dist}
+Version:    1.3.0
+Release:    2%{?dist}
 Summary:    Unofficial meep RPM package
 
 #Group:
@@ -29,7 +29,7 @@ BuildRequires: swig
 BuildRequires: hdf5-devel
 
 # Optional libraries but come on, these are small packages that are useful
-BuildRequires: harminv
+BuildRequires: harminv >= 1.4
 BuildRequires: mpb >= 1.5.1-10
 BuildRequires: fftw2-devel
 
@@ -152,7 +152,10 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 
 
 %changelog
-* Wed Jul 8 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.3-5
+* Thu Jul 09 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.3.0-2
+- Updated version of harminv
+
+* Wed Jul 8 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.3.0-1
 - Updated versions of MEEP
 
 * Mon Mar 23 2015 Mark Harfouche - 1.2.2-5
