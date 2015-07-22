@@ -1,6 +1,6 @@
 Name:       meep
 Version:    1.3.0
-Release:    2%{?dist}
+Release:    3%{?dist}
 Summary:    Unofficial meep RPM package
 
 #Group:
@@ -29,8 +29,8 @@ BuildRequires: swig
 BuildRequires: hdf5-devel
 
 # Optional libraries but come on, these are small packages that are useful
-BuildRequires: harminv >= 1.4
-BuildRequires: mpb >= 1.5.1-10
+BuildRequires: harminv-devel >= 1.4
+BuildRequires: mpb-devel >= 1.5.1-12
 BuildRequires: fftw2-devel
 
 
@@ -47,15 +47,38 @@ package.
 # List of MPIs to compile for
 %global mpi_list mpich openmpi
 
+%package devel
+Summary: Development files for meep
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+%description devel
+Development files for meep.
+
+%package static
+Summary: Static libraries for meep
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+%description static
+Static libraries for meep.
+
 %package mpich
 Summary:    Unofficial meep RPM package with mpich support
 # need to compile against mpich
 BuildRequires: mpich-devel
 BuildRequires: mpb-mpich
 BuildRequires: fftw2-mpich-devel
-
 %description mpich
 Meep finite-difference time-domain (FDTD) simulation software with mpich.
+
+%package mpich-devel
+Summary: Development files for meep with MPICH (MPI)
+Requires:       %{name}-mpich%{?_isa} = %{version}-%{release}
+%description mpich-devel
+Development files for meep with MPICH (MPI).
+
+%package mpich-static
+Summary: Static libraries for meep with MPICH (MPI)
+Requires:       %{name}-mpich-devel%{?_isa} = %{version}-%{release}
+%description mpich-static
+Static libraries for meep with MPICH (MPI).
 
 %package openmpi
 Summary:    Unofficial meep RPM package with openmpi support
@@ -67,6 +90,18 @@ BuildRequires: fftw2-openmpi-devel
 %description openmpi
 Meep finite-difference time-domain (FDTD) simulation software with openmpi.
 
+%package openmpi-devel
+Summary: Development files for meep with openmpi (MPI)
+Requires:       %{name}-openmpi%{?_isa} = %{version}-%{release}
+%description openmpi-devel
+Development files for meep with openmpi (MPI).
+
+%package openmpi-static
+Summary: Static libraries for meep with openmpi (MPI)
+Requires:       %{name}-openmpi-devel%{?_isa} = %{version}-%{release}
+%description openmpi-static
+Static libraries for meep with openmpi (MPI).
+
 
 %prep
 %setup -qn meep-%{commit}
@@ -77,6 +112,16 @@ Meep finite-difference time-domain (FDTD) simulation software with openmpi.
 %build
 cd ..
 
+rm -rf %{name}-%{commit}-build
+cp -p -R %{name}-%{commit} %{name}-%{commit}-build
+
+pushd %{name}-%{commit}-build
+autoreconf --verbose --install --symlink --force
+# Make once for without mpi
+%configure --enable-maintainer-mode --enable-portable-binary --enable-shared
+make %{?_smp_mflags}
+popd
+
 for mpi in %{mpi_list}
 do
 rm -rf %{name}-%{commit}-build-$mpi
@@ -86,11 +131,12 @@ cp -p -R %{name}-%{commit} %{name}-%{commit}-build-$mpi
 pushd %{name}-%{commit}-build-$mpi
 module load mpi/${mpi}-%{_arch}
 
-sh autogen.sh
+autoreconf --verbose --install --symlink --force
 
 %configure \
     --enable-maintainer-mode \
     --enable-portable-binary \
+    --enable-shared \
     --with-mpi \
     --libdir=%{_libdir}/$mpi/lib \
     --bindir=%{_libdir}/$mpi/bin \
@@ -106,15 +152,6 @@ popd
 done
 
 
-rm -rf %{name}-%{commit}-build
-cp -p -R %{name}-%{commit} %{name}-%{commit}-build
-
-pushd %{name}-%{commit}-build
-sh autogen.sh
-# Make once for without mpi
-%configure --enable-maintainer-mode --enable-portable-binary
-make %{?_smp_mflags}
-popd
 
 %install
 cd ..
@@ -131,27 +168,47 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 %doc
 %{_bindir}/*
 %{_datadir}/*
+%{_libdir}/*.so.*
+
+%files devel
 %{_includedir}/*
-%{_libdir}/*.a
 %{_libdir}/pkgconfig/meep.pc
-#%{_mandir}/man1/*
+%{_libdir}/*.so
+
+%files static
+%{_libdir}/*.a
 
 %files mpich
 %doc
 %{_libdir}/mpich/bin/*
-%{_libdir}/mpich/lib/*
+%{_libdir}/mpich/lib/*.so.*
+
+%files mpich-devel
 %{_includedir}/mpich-%{_arch}/*
-#%{_libdir}/mpich/share/man/man1/*
+%{_libdir}/mpich/lib/pkgconfig/meep_mpi.pc
+%{_libdir}/mpich/lib/*.so
+
+%files mpich-static
+%{_libdir}/mpich/lib/*.a
 
 %files openmpi
 %doc
 %{_libdir}/openmpi/bin/*
-%{_libdir}/openmpi/lib/*
+%{_libdir}/openmpi/lib/*.so.*
+
+%files openmpi-devel
 %{_includedir}/openmpi-%{_arch}/*
-#%{_libdir}/openmpi/share/man/man1/*
+%{_libdir}/openmpi/lib/pkgconfig/meep_mpi.pc
+%{_libdir}/openmpi/lib/*.so
+
+%files openmpi-static
+%{_libdir}/openmpi/lib/*.a
 
 
 %changelog
+* Wed Jul 22 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.3.0-3
+- With shared libraries and separated out the static files
+
 * Thu Jul 09 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.3.0-2
 - Updated version of harminv
 
