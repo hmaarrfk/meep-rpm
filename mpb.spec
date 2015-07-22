@@ -1,6 +1,6 @@
 Name:       mpb
 Version:    1.5.1
-Release:    10%{?dist}
+Release:    12%{?dist}
 Summary:    Unofficial MPB RPM package
 
 %global commit d7d4930ebe84c5ca9abe750021e106e204ab79ae
@@ -18,6 +18,7 @@ Patch3:     mpb-autogenRemoveConfigure.patch
 #Patch4:     mpb-configure_ac_libctl.patch
 
 %global mpi_list mpich openmpi
+
 
 BuildRequires: autoconf
 BuildRequires: automake
@@ -41,21 +42,57 @@ dielectric structures, on both serial and parallel computers. It was developed
 by Steven G. Johnson at MIT along with the Joannopoulos Ab Initio Physics
 group.
 
+# Don't really know how to package devel files
+# I inspired myself from the fftw3 .spec file
+%package devel
+Summary: Development files for mpb
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+%description devel
+Development files for mpb.
+
+%package static
+Summary: Static libraries files for mpb (untested)
+Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
+%description static
+Static libraries files for mpb (untested)
+
 %package mpich
 Summary:    Unofficial MPB RPM package with mpich support
 BuildRequires: mpich-devel
 BuildRequires: fftw2-mpich-devel
-
 %description mpich
 The MIT Photonic-Bands (MPB) with MPI (mpich).
+
+%package mpich-devel
+Summary:    Unofficial MPB RPM package with mpich support development library
+Requires:   %{name}-mpich{?_isa} = %{version}-%{release}
+%description mpich-devel
+The MIT Photonic-Bands (MPB) with MPI (mpich) development libraries.
+
+%package mpich-static
+Summary:    Unofficial MPB RPM package with mpich support static libraries
+Requires:   %{name}-mpich-devel{?_isa} = %{version}-%{release}
+%description mpich-static
+The MIT Photonic-Bands (MPB) with MPI (mpich) static libraries.
 
 %package openmpi
 Summary:    Unofficial MPB RPM package with openmpi support
 BuildRequires: openmpi-devel
 BuildRequires: fftw2-openmpi-devel
-
 %description openmpi
 The MIT Photonic-Bands (MPB) with MPI (openmpi).
+
+%package openmpi-devel
+Summary:    Unofficial MPB RPM package with openmpi support development library
+Requires:   %{name}-openmpi{?_isa} = %{version}-%{release}
+%description openmpi-devel
+The MIT Photonic-Bands (MPB) with MPI (openmpi) development libraries.
+
+%package openmpi-static
+Summary:    Unofficial MPB RPM package with openmpi support static libraries
+Requires:   %{name}-openmpi-devel{?_isa} = %{version}-%{release}
+%description openmpi-static
+The MIT Photonic-Bands (MPB) with MPI (openmpi) stati libraries.
 
 
 %prep
@@ -64,9 +101,19 @@ The MIT Photonic-Bands (MPB) with MPI (openmpi).
 
 # autoconf is required because for now patch 14 patches the configure.ac file
 %build
-sh autogen.sh
-
+autoreconf --verbose --install --symlink --force
 cd ..
+
+rm -rf %{name}-%{commit}-build
+cp -p -R %{name}-%{commit} %{name}-%{commit}-build
+pushd %{name}-%{commit}-build
+%configure --enable-maintainer-mode --enable-portable-binary --enable-shared
+make %{?_smp_mflags}
+popd
+
+previous_LDFLAGS=${LDFLAGS}
+
+
 for mpi in %{mpi_list}
 do
 rm -rf %{name}-%{commit}-build-$mpi
@@ -76,9 +123,12 @@ cp -p -R %{name}-%{commit} %{name}-%{commit}-build-$mpi
 pushd %{name}-%{commit}-build-$mpi
 module load mpi/${mpi}-%{_arch}
 
+export LDFLAGS=-L%{_libdir}/$mpi/lib
+
 %configure \
     --enable-maintainer-mode \
     --enable-portable-binary \
+    --enable-shared \
     --with-mpi \
     --with-fftw2 \
     --libdir=%{_libdir}/$mpi/lib \
@@ -94,13 +144,9 @@ module purge
 popd
 done
 
+export LDFLAGS=%{previous_LDFLAGS}
 
-rm -rf %{name}-%{commit}-build
-cp -p -R %{name}-%{commit} %{name}-%{commit}-build
-pushd %{name}-%{commit}-build
-%configure --enable-maintainer-mode --enable-portable-binary
-make %{?_smp_mflags}
-popd
+
 
 %install
 cd ..
@@ -114,39 +160,59 @@ make -C %{name}-%{commit}-build install DESTDIR=%{buildroot}
 
 find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 
+%post
+/sbin/ldconfig
+
+%postun
+/sbin/ldconfig
+
 
 %files
 %doc
 %{_bindir}/*
 %{_includedir}/*
-%{_libdir}/*.a
 %{_datadir}/*
-#%{_bindir}/mpb
-#%{_bindir}/mpb-data
-#%{_bindir}/mpb-split
-#%{_includedir}/mpb.h
-#%{_includedir}/mpb/eigensolver.h
-#%{_includedir}/mpb/matrices.h
-#%{_includedir}/mpb/maxwell.h
-#%{_includedir}/mpb/scalar.h
-#%{_libdir}/libmpb.a
-#%{_datadir}/mpb/mpb.scm
-#%{_mandir}/man1/*
+%{_libdir}/*.so.*
+
+%files static
+%{_libdir}/*.a
+
+%files devel
+%{_libdir}/*.so
+
 
 %files mpich
 %{_libdir}/mpich/bin/*
-%{_libdir}/mpich/lib/*
-%{_includedir}/mpich-%{_arch}/*
+%{_libdir}/mpich/lib/*.so.*
 %{_libdir}/mpich/share/man/man1/*
+#%{_includedir}/mpich-%{_arch}/*
+
+%files mpich-devel
+%{_libdir}/mpich/lib/*.so
+
+%files mpich-static
+%{_libdir}/mpich/lib/*.a
 
 %files openmpi
 %{_libdir}/openmpi/bin/*
-%{_libdir}/openmpi/lib/*
-%{_includedir}/openmpi-%{_arch}/*
+%{_libdir}/openmpi/lib/*.so.*
 %{_libdir}/openmpi/share/man/man1/*
+#%{_includedir}/openmpi-%{_arch}/*
+
+%files openmpi-devel
+%{_libdir}/openmpi/lib/*.so
+
+%files openmpi-static
+%{_libdir}/openmpi/lib/*.a
 
 
 %changelog
+* Wed Jul 22 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.5.1-12
+- With shared libraries
+
+* Tue Jul 21 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.5.1-11
+- Adding shared libraries
+
 * Wed Jul 08 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.5.1-10
 - rebuilt
 

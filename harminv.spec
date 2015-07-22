@@ -1,6 +1,6 @@
 Name:       harminv
 Version:    1.4.0
-Release:    2%{?dist}
+Release:    3%{?dist}
 Summary:    Unofficial Harminv Package
 
 #Group:
@@ -34,6 +34,23 @@ given bandwidth, it determines the frequencies, decay constants, amplitudes,
 and phases of those sinusoids.
 
 
+# Don't really know how to package devel files
+# I inspired myself from the fftw3 .spec file
+%package devel
+Summary: Development files for harminv
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description devel
+Development files for harminv.
+
+%package static
+Summary: Static libraries files for harminv (untested)
+Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
+
+%description static
+Static libraries files for harminv (untested)
+
+
 %prep
 %setup -qn harminv-%{commit}
 
@@ -41,27 +58,43 @@ and phases of those sinusoids.
 %build
 libtoolize --force
 autoreconf --verbose --install --symlink --force
-autoreconf --verbose --install --symlink --force
-autoreconf --verbose --install --symlink --force
 %configure \
-    --enable-maintainer-mode
+    --enable-maintainer-mode \
+    --enable-shared
 make %{?_smp_mflags}
 
 
 %install
 make install DESTDIR=%{buildroot}
 
+%post
+/sbin/ldconfig
+
+%postun
+/sbin/ldconfig
 
 %files
 %doc
 %{_bindir}/*
-%{_includedir}/*
-%{_libdir}/*
+%{_libdir}/libharminv.so.*
 %{_mandir}/man1/*
 
+%files devel
+%{_includedir}/*
+%{_libdir}/libharminv.so
+%{_libdir}/pkgconfig/*
+
+%files static
+%{_libdir}/libharminv.a
+%{_libdir}/libharminv.la
+
+# What is .la????
 
 
 %changelog
+* Tue Jul 21 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.4.0-3
+- Adding shared libraries (*.so files)
+
 * Wed Jul 8 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.4.0-2
 - rebuild
 
