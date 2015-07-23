@@ -1,6 +1,6 @@
 Name:       harminv
 Version:    1.4.0
-Release:    3%{?dist}
+Release:    4%{?dist}
 Summary:    Unofficial Harminv Package
 
 #Group:
@@ -67,6 +67,8 @@ make %{?_smp_mflags}
 %install
 make install DESTDIR=%{buildroot}
 
+find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
+
 %post
 /sbin/ldconfig
 
@@ -86,12 +88,11 @@ make install DESTDIR=%{buildroot}
 
 %files static
 %{_libdir}/libharminv.a
-%{_libdir}/libharminv.la
-
-# What is .la????
-
 
 %changelog
+* Thu Jul 23 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.4.0-4
+- Removed .la
+
 * Tue Jul 21 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.4.0-3
 - Adding shared libraries (*.so files)
 
