@@ -1,6 +1,6 @@
 Name:       meep
 Version:    1.3.0
-Release:    3%{?dist}
+Release:    4%{?dist}
 Summary:    Unofficial meep RPM package
 
 #Group:
@@ -22,6 +22,7 @@ BuildRequires: lapack-devel
 BuildRequires: libctl-devel
 BuildRequires: libgfortran
 BuildRequires: libquadmath-devel
+BuildRequires: gsl-devel
 BuildRequires: libtool
 BuildRequires: swig
 
@@ -165,7 +166,7 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 
 
 %files
-%doc
+#%doc
 %{_bindir}/*
 %{_datadir}/*
 %{_libdir}/*.so.*
@@ -206,6 +207,9 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 
 
 %changelog
+* Wed Jul 29 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.3.0-4
+- With GSL for near to far field
+
 * Wed Jul 22 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.3.0-3
 - With shared libraries and separated out the static files
 
