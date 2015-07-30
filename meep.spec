@@ -1,6 +1,6 @@
 Name:       meep
 Version:    1.3.0
-Release:    5%{?dist}
+Release:    6%{?dist}
 Summary:    Unofficial meep RPM package
 
 #Group:
@@ -164,9 +164,13 @@ done
 
 find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 
+# Get rid of the Makefile.am and Makefile.in for the doc
+find ${RPM_BUILD_DIR} -type f -name "Makefile.am" -exec rm -f {} ';'
+find ${RPM_BUILD_DIR} -type f -name "Makefile.in" -exec rm -f {} ';'
+
 
 %files
-%doc AUTHORS COPYING COPYRIGHT NEWS README.md TODO
+%doc AUTHORS COPYING COPYRIGHT NEWS README.md TODO examples
 %{_bindir}/*
 %{_datadir}/*
 %{_libdir}/*.so.*
@@ -180,7 +184,7 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 %{_libdir}/*.a
 
 %files mpich
-%doc AUTHORS COPYING COPYRIGHT NEWS README.md TODO
+%doc AUTHORS COPYING COPYRIGHT NEWS README.md TODO examples
 %{_libdir}/mpich/bin/*
 %{_libdir}/mpich/lib/*.so.*
 
@@ -193,7 +197,7 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 %{_libdir}/mpich/lib/*.a
 
 %files openmpi
-%doc AUTHORS COPYING COPYRIGHT NEWS README.md TODO
+%doc AUTHORS COPYING COPYRIGHT NEWS README.md TODO examples
 %{_libdir}/openmpi/bin/*
 %{_libdir}/openmpi/lib/*.so.*
 
@@ -207,6 +211,9 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 
 
 %changelog
+* Thu Jul 30 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.3.0-6
+- Now docs have examples
+
 * Thu Jul 30 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.3.0-5
 - Added documentation
 
