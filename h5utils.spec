@@ -1,6 +1,6 @@
 Name:       h5utils
 Version:    1.12.1
-Release:    3%{?dist}
+Release:    4%{?dist}
 Summary:    Unofficial h5utils RPM package
 
 #Group:
@@ -41,7 +41,7 @@ make install DESTDIR=%{buildroot}
 
 
 %files
-%doc
+%doc AUTHORS COPYING ChangeLog NEWS README
 %{_bindir}/*
 %{_datadir}/%{name}
 %{_mandir}/man1/*
@@ -49,6 +49,9 @@ make install DESTDIR=%{buildroot}
 
 
 %changelog
+* Thu Jul 30 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.12.1-4
+- Added the documentation
+
 * Fri Mar 20 2015 makerpm - 1.12.1-3
 - Added the dependency required to build h5math
 * Fri Mar 20 2015 makerpm - 1.12.1-2

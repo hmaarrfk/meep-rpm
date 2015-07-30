@@ -1,6 +1,6 @@
 Name:       meep
 Version:    1.3.0
-Release:    4%{?dist}
+Release:    5%{?dist}
 Summary:    Unofficial meep RPM package
 
 #Group:
@@ -166,7 +166,7 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 
 
 %files
-#%doc
+%doc AUTHORS COPYING COPYRIGHT NEWS README.md TODO
 %{_bindir}/*
 %{_datadir}/*
 %{_libdir}/*.so.*
@@ -180,7 +180,7 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 %{_libdir}/*.a
 
 %files mpich
-%doc
+%doc AUTHORS COPYING COPYRIGHT NEWS README.md TODO
 %{_libdir}/mpich/bin/*
 %{_libdir}/mpich/lib/*.so.*
 
@@ -193,7 +193,7 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 %{_libdir}/mpich/lib/*.a
 
 %files openmpi
-%doc
+%doc AUTHORS COPYING COPYRIGHT NEWS README.md TODO
 %{_libdir}/openmpi/bin/*
 %{_libdir}/openmpi/lib/*.so.*
 
@@ -207,6 +207,9 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 
 
 %changelog
+* Thu Jul 30 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.3.0-5
+- Added documentation
+
 * Wed Jul 29 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.3.0-4
 - With GSL for near to far field
 

@@ -1,6 +1,6 @@
 Name:       harminv
 Version:    1.4.0
-Release:    4%{?dist}
+Release:    5%{?dist}
 Summary:    Unofficial Harminv Package
 
 #Group:
@@ -76,7 +76,7 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 /sbin/ldconfig
 
 %files
-%doc
+%doc COPYING COPYRIGHT NEWS.md README.md
 %{_bindir}/*
 %{_libdir}/libharminv.so.*
 %{_mandir}/man1/*
@@ -90,6 +90,9 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 %{_libdir}/libharminv.a
 
 %changelog
+* Thu Jul 30 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.4.0-5
+- Added the documentation to the pacakge
+
 * Thu Jul 23 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.4.0-4
 - Removed .la
 
