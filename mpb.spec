@@ -1,6 +1,6 @@
 Name:       mpb
 Version:    1.5.1
-Release:    12%{?dist}
+Release:    13%{?dist}
 Summary:    Unofficial MPB RPM package
 
 %global commit d7d4930ebe84c5ca9abe750021e106e204ab79ae
@@ -167,11 +167,12 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 /sbin/ldconfig
 
 
+#####%doc
 %files
 %doc
+%{_mandir}/man1/*
 %{_bindir}/*
-%{_includedir}/*
-%{_datadir}/*
+%{_datadir}/mpb
 %{_libdir}/*.so.*
 
 %files static
@@ -179,16 +180,19 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 
 %files devel
 %{_libdir}/*.so
+%{_includedir}/*.h
+%{_includedir}/mpb
 
 
 %files mpich
 %{_libdir}/mpich/bin/*
 %{_libdir}/mpich/lib/*.so.*
 %{_libdir}/mpich/share/man/man1/*
-#%{_includedir}/mpich-%{_arch}/*
 
 %files mpich-devel
 %{_libdir}/mpich/lib/*.so
+%{_includedir}/mpich-%{_arch}/*.h
+%{_includedir}/mpich-%{_arch}/mpb
 
 %files mpich-static
 %{_libdir}/mpich/lib/*.a
@@ -197,16 +201,20 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 %{_libdir}/openmpi/bin/*
 %{_libdir}/openmpi/lib/*.so.*
 %{_libdir}/openmpi/share/man/man1/*
-#%{_includedir}/openmpi-%{_arch}/*
 
 %files openmpi-devel
 %{_libdir}/openmpi/lib/*.so
+%{_includedir}/openmpi-%{_arch}/*.h
+%{_includedir}/openmpi-%{_arch}/mpb
 
 %files openmpi-static
 %{_libdir}/openmpi/lib/*.a
 
 
 %changelog
+* Thu Jul 30 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.5.1-13
+- Correct placement of .h files
+
 * Wed Jul 22 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.5.1-12
 - With shared libraries
 
