@@ -1,6 +1,6 @@
 Name:       mpb
 Version:    1.5.1
-Release:    13%{?dist}
+Release:    14%{?dist}
 Summary:    Unofficial MPB RPM package
 
 %global commit d7d4930ebe84c5ca9abe750021e106e204ab79ae
@@ -169,7 +169,7 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 
 #####%doc
 %files
-%doc
+%doc COPYING COPYRIGHT README.md NEWS TODO AUTHORS
 %{_mandir}/man1/*
 %{_bindir}/*
 %{_datadir}/mpb
@@ -185,6 +185,7 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 
 
 %files mpich
+%doc COPYING COPYRIGHT README.md NEWS TODO AUTHORS
 %{_libdir}/mpich/bin/*
 %{_libdir}/mpich/lib/*.so.*
 %{_libdir}/mpich/share/man/man1/*
@@ -198,6 +199,7 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 %{_libdir}/mpich/lib/*.a
 
 %files openmpi
+%doc COPYING COPYRIGHT README.md NEWS TODO AUTHORS
 %{_libdir}/openmpi/bin/*
 %{_libdir}/openmpi/lib/*.so.*
 %{_libdir}/openmpi/share/man/man1/*
@@ -212,6 +214,9 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 
 
 %changelog
+* Thu Jul 30 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.5.1-14
+- Added copyright info
+
 * Thu Jul 30 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.5.1-13
 - Correct placement of .h files
 
