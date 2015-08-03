@@ -1,6 +1,6 @@
 Name:       mpb
 Version:    1.5.1
-Release:    15%{?dist}
+Release:    16%{?dist}
 Summary:    Unofficial MPB RPM package
 
 %global commit d7d4930ebe84c5ca9abe750021e106e204ab79ae
@@ -16,6 +16,7 @@ Patch1:     mpb-testCTL.patch
 Patch2:     mpb-utilsCTL.patch
 Patch3:     mpb-autogenRemoveConfigure.patch
 #Patch4:     mpb-configure_ac_libctl.patch
+Patch5:     mpb-check.ctl.patch
 
 %global mpi_list mpich openmpi
 
@@ -98,6 +99,7 @@ The MIT Photonic-Bands (MPB) with MPI (openmpi) stati libraries.
 %prep
 %setup -qn %{name}-%{commit}
 %patch3 -p1
+%patch5 -p1
 
 # autoconf is required because for now patch 14 patches the configure.ac file
 %build
@@ -218,6 +220,9 @@ find ${RPM_BUILD_DIR} -type f -name "Makefile.in" -exec rm -f {} ';'
 
 
 %changelog
+* Thu Jul 30 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.5.1-16
+- check.ctl now works on Fedora. Don't know why (fold-left and ....) doesn't work
+
 * Thu Jul 30 2015 Mark Harfouche <mark.harfouche@gmail.com> - 1.5.1-15
 - Now doc have examples
 
